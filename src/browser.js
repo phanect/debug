@@ -1,15 +1,11 @@
 /* eslint-env browser */
+import setup from './common';
 
-/**
+/*
  * This is the web browser implementation of `debug()`.
  */
 
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = localstorage();
-exports.destroy = (() => {
+export const destroy = (() => {
 	let warned = false;
 
 	return () => {
@@ -24,7 +20,7 @@ exports.destroy = (() => {
  * Colors.
  */
 
-exports.colors = [
+export const colors = [
 	'#0000CC',
 	'#0000FF',
 	'#0033CC',
@@ -112,7 +108,7 @@ exports.colors = [
  */
 
 // eslint-disable-next-line complexity
-function useColors() {
+export function useColors() {
 	// NB: In an Electron preload script, document will be defined but not fully
 	// initialized. Since we know we're in Chrome, we'll just detect this case
 	// explicitly
@@ -145,7 +141,7 @@ function useColors() {
  * @api public
  */
 
-function formatArgs(args) {
+export function formatArgs(args) {
 	args[0] = (this.useColors ? '%c' : '') +
 		this.namespace +
 		(this.useColors ? ' %c' : ' ') +
@@ -188,7 +184,7 @@ function formatArgs(args) {
  *
  * @api public
  */
-exports.log = console.debug || console.log || (() => {});
+export const log = console.debug || console.log || (() => {});
 
 /**
  * Save `namespaces`.
@@ -196,7 +192,7 @@ exports.log = console.debug || console.log || (() => {});
  * @param {String} namespaces
  * @api private
  */
-function save(namespaces) {
+export function save(namespaces) {
 	try {
 		if (namespaces) {
 			exports.storage.setItem('debug', namespaces);
@@ -215,10 +211,10 @@ function save(namespaces) {
  * @return {String} returns the previously persisted debug modes
  * @api private
  */
-function load() {
+export function load() {
 	let r;
 	try {
-		r = exports.storage.getItem('debug');
+		r = storage.getItem('debug');
 	} catch (error) {
 		// Swallow
 		// XXX (@Qix-) should we be logging these?
@@ -253,8 +249,9 @@ function localstorage() {
 		// XXX (@Qix-) should we be logging these?
 	}
 }
+export const storage = localstorage();
 
-module.exports = require('./common')(exports);
+export default setup(exports);
 
 const {formatters} = module.exports;
 

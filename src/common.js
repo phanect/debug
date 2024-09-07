@@ -4,7 +4,7 @@
  * implementations of `debug()`.
  */
 
-function setup(env) {
+export default function setup(env) {
 	createDebug.debug = createDebug;
 	createDebug.default = createDebug;
 	createDebug.coerce = coerce;
@@ -270,5 +270,3 @@ function setup(env) {
 
 	return createDebug;
 }
-
-module.exports = setup;
